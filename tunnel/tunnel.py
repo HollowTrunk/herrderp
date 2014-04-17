@@ -40,9 +40,12 @@ class Chunk(pygame.sprite.Sprite):
 		self.image.fill(BLACK)
 		self.rect = pygame.Rect(position, self.size)
 
+
 class Road(pygame.sprite.Group):
 
 	size = (320,20)
+	position = (160,0)
+
 	chunk_list = []
 
 	def __init__(self):
@@ -52,17 +55,17 @@ class Road(pygame.sprite.Group):
 			self.chunk_list.append(Chunk(position, self.size))
 		self.add(self.chunk_list)
 
-	def new_size(self, input):
-		result = int((320/math.exp(input)+20))
+	def calc_size(self, input):
+		result = (int(((320/(math.exp(input)/100000))+20)),20)
 		return result
 
 	def defill(self):
-		self.size[0] = self.new_size(self.size[0])
+		self.size = self.calc_size(score)
 
-		self.chunk_list.insert(0, Chunk(position, self.size))
+		self.chunk_list.insert(0, Chunk(self.position, self.size))
 		self.chunk_list.pop()
 
-		for i in len(self.chunk_list):
+		for i in range(len(self.chunk_list)):l
 			position = (160, (0 + 20*i))
 			self.chunk_list[i].position = position
 
@@ -79,10 +82,6 @@ class Road(pygame.sprite.Group):
 		else:
 			print "in"
 
-
-
-#	(320/exp(x)+20
-
 def main():
 
 	pygame.init()
@@ -91,6 +90,10 @@ def main():
 	window = pygame.display.set_mode(window_size)
 	cursor = Cursor()
 	road = Road()
+
+	print road.calc_size(0)
+
+	score = 0
 
 	run = True
 	while run:
@@ -105,11 +108,13 @@ def main():
 				if event.key == K_RIGHT:
 					cursor.move_right()
 
-		road.defill()
+		#road.calc_size(score)
 
 		window.fill(WHITE)
 		road.draw(window)
 		window.blit(cursor.image, cursor.rect)
+
+		score += 1
 
 		#road.collide(cursor)
 

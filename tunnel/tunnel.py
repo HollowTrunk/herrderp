@@ -3,7 +3,6 @@ import pygame
 import sys
 
 from pygame.locals import *
-from pygame.gfxdraw import *
 from random import choice
 
 BLACK = (0,0,0)
@@ -59,18 +58,22 @@ class Road(pygame.sprite.Group):
 	def __init__(self):
 		pygame.sprite.Group.__init__(self)
 
+		for i in range(24):
+			self.chunk_list.append(Chunk((160,20 * i), self.size))
+			self.add(self.chunk_list[i])
+
 	def calc_size(self, input):
-		result = (int((300/math.exp(input/5000.0))+20), 20)
+		result = (int((280/math.exp(input/5000.0))+40), 20)
 		return result
 
 	def calc_position(self, input):
-		pos_seq = [-20,-10,-5, 5, 10, 20]
+		pos_seq = [-10,-5, 5, 10]
 
 		if (input[0]+self.size[0]+5) >= window_size[0]:
-			result = ((input[0]-20),0)
+			result = ((input[0]-10),0)
 
 		elif (input[0]-5) <= 0:
-			result = ((input[0]+20),0)
+			result = ((input[0]+10),0)
 
 		else:
 			result = ((input[0]+choice(pos_seq)),0)
@@ -84,7 +87,8 @@ class Road(pygame.sprite.Group):
 		self.chunk_list.insert(0, Chunk(self.position, self.size))
 		self.add(self.chunk_list[0])
 
-		for i in range(len(self.chunk_list)):
+		len_chunk_list = len(self.chunk_list)
+		for i in range(len_chunk_list):
 			position = (self.chunk_list[i].position[0], 20 * i)
 			self.chunk_list[i].update(position, self.chunk_list[i].size)
 
@@ -103,10 +107,26 @@ class Road(pygame.sprite.Group):
 			return True
 
 def display_score(score, window):
-	font = pygame.font.Font(None, 50)
-	text = font.render(str(score), 1, BLACK)
-	textpos = text.get_rect()
+	font = pygame.font.Font(None, 30)
+	text = font.render(str(score), True, BLACK, WHITE)
+	textpos = window.get_rect().topleft
 	window.blit(text, textpos)
+
+def display_info(msg, window):
+	font = pygame.font.Font(None,50)
+
+	if msg == 1:
+		text = font.render("Start", True, BLACK, WHITE)
+		textpos = window.get_rect().center
+		window.blit(text, textpos)
+	elif msg == 2:
+		text = font.render("Pause", True, BLACK, WHITE)
+		textpos = window.get_rect().center
+		window.blit(text, textpos)
+	elif msg == 3:
+		text = font.render("GAME OVER", True, BLACK, WHITE)
+		textpos = window.get_rect().center
+		window.blit(text, textpos)
 
 def main():
 	pygame.init()
@@ -118,9 +138,8 @@ def main():
 	cursor = Cursor()
 	road = Road()
 
-	
-
 	run = True
+
 	while run:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -147,8 +166,16 @@ def main():
 
 		score += 1
 
-		#road.collide(cursor)
+		if not road.collide(cursor):
+			display_info(3, window)
+			break
 
 		pygame.display.flip()
+
+	pygame.display.flip()
+	
+	event = pygame.event.wait()
+	if event.type == pygame.KEYDOWN:
+		print 'restart'
 
 main()

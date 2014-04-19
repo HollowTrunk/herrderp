@@ -176,6 +176,6 @@ def main():
 	
 	event = pygame.event.wait()
 	if event.type == pygame.KEYDOWN:
-		print 'restart'
+		print 'restart'  
 
 main()

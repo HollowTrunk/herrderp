@@ -6,7 +6,7 @@ from pygame.locals import *
 
 BLACK = (0,0,0)
 SPEED = 200000
-WAIT = 1000
+WAIT = 2000
 WHITE = (255,255,255)
 window_size = (640,480)
 
@@ -41,7 +41,9 @@ def display_info(msg):
 
 def init():
 	pygame.init()
-	pygame.event.set_blocked(pygame.MOUSEMOTION)
+	pygame.event.set_allowed(None)
+	pygame.event.set_allowed(pygame.KEYDOWN)
+	pygame.event.set_allowed(QUIT)
 	pygame.key.set_repeat(1,0)
 
 def run():
@@ -88,13 +90,13 @@ def main():
 		run()
 		new_game = False
 
+		pygame.time.wait(WAIT)
+		
 		event = pygame.event.wait()
-
 		if event.type == QUIT:
 			pygame.quit()
 			sys.quit()
 		if event.type == pygame.KEYDOWN:
 			new_game = True
-			continue
 
 main()

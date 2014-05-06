@@ -50,13 +50,13 @@ class Chunk(pygame.sprite.Sprite):
 
 class Road(pygame.sprite.Group):
 
-	size = (320,20)
-	position = (160,0)
-
-	chunk_list = []
-
 	def __init__(self):
 		pygame.sprite.Group.__init__(self)
+
+		self.size = (320,20)
+		self.position = (160,0)
+
+		self.chunk_list = []
 
 		for i in range(24):
 			self.chunk_list.append(Chunk((160,20 * i), self.size))

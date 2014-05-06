@@ -57,7 +57,7 @@ def run():
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				pygame.quit()
-				sys.quit()
+				quit()
 
 			if event.type == KEYDOWN:
 				if event.key == K_LEFT:
@@ -95,7 +95,7 @@ def main():
 		event = pygame.event.wait()
 		if event.type == QUIT:
 			pygame.quit()
-			sys.quit()
+			quit()
 		if event.type == pygame.KEYDOWN:
 			new_game = True
 
